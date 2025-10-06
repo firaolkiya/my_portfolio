@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const projectCards = document.querySelectorAll(".project-card")
   const testimonialContainer = document.querySelector(".testimonial-container")
   const contactContent = document.querySelector(".contact-content")
+  const achievementCards = document.querySelectorAll(".achievement-card")
 
   // Add background animation elements
   const sections_with_bg = document.querySelectorAll(".hero, .about, .skills, .testimonials")
@@ -135,6 +136,17 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => {
           card.classList.add("animate")
         }, index * 200)
+      }
+    })
+
+    // Animate achievement cards
+    achievementCards.forEach((card, index) => {
+      const cardTop = card.getBoundingClientRect().top
+      if (cardTop < triggerBottom) {
+        // Add delay based on index
+        setTimeout(() => {
+          card.classList.add("animate")
+        }, index * 150)
       }
     })
 
@@ -336,35 +348,157 @@ function animateHeroText() {
   const originalText = heroText.textContent
   heroText.innerHTML = ""
 
-  // Split the text into parts: "Hi, I'm " and "Firaol Bulo"
+  // Split text parts
   const textParts = ["Hi, I'm ", "Firaol Bulo"]
-
-  // Create wrapper for first part
-  const firstPart = document.createElement("span")
-  firstPart.textContent = textParts[0]
-  heroText.appendChild(firstPart)
-
-  // Create wrapper for name with gradient
-  const nameSpan = document.createElement("span")
-  nameSpan.textContent = textParts[1]
-  nameSpan.classList.add("gradient-text")
-  heroText.appendChild(nameSpan)
+  const fullText = "Hi, I'm Firaol Bulo"
 
   // Animate each character
-  const allChars = heroText.textContent.split("")
-  heroText.innerHTML = ""
-
-  allChars.forEach((char, index) => {
+  fullText.split("").forEach((char, index) => {
     const charSpan = document.createElement("span")
     charSpan.textContent = char
     charSpan.classList.add("animated-text")
     charSpan.style.animationDelay = `${index * 0.1}s`
 
-    // If this character is part of the name, add the gradient
+    // Add gradient to "Firaol Bulo"
     if (index >= textParts[0].length) {
       charSpan.classList.add("gradient-text")
     }
 
+    // Preserve spaces properly
+    if (char === " ") {
+      charSpan.innerHTML = "&nbsp;"
+    }
+    if(char==="\n"){
+      charSpan.innerHTML = "<br>"
+    }
+
     heroText.appendChild(charSpan)
+  })
+
+  // Certificate Modal Functions
+  window.showCertModal = function(certType) {
+    const modal = document.getElementById('certModal')
+    const modalImage = document.getElementById('certModalImage')
+    const modalTitle = document.getElementById('certModalTitle')
+    const modalProgram = document.getElementById('certModalProgram')
+    const modalDescription = document.getElementById('certModalDescription')
+    const modalIssuer = document.getElementById('certModalIssuer')
+    const modalDate = document.getElementById('certModalDate')
+    const modalDownload = document.getElementById('certModalDownload')
+
+    // Certificate data
+    const certificates = {
+      a2sv: {
+        title: 'Certificate Details - A2SV',
+        program: 'African to Silicon Valley (A2SV)',
+        description: 'Comprehensive software engineering program focusing on data structures, algorithms, and full-stack development. Selected as one of Ethiopia\'s top tech talents for intensive training in preparation for global tech opportunities.',
+        issuer: 'African to Silicon Valley',
+        date: '2023 - 2025',
+        image: 'asset/certificates/a2sv.jpg',
+        download: 'asset/certificates/a2sv-cert.pdf'
+      },
+      kifiya: {
+        title: 'Certificate Details - Kifiya AI Program',
+        program: 'Kifiya AI Program',
+        description: 'An intensive 12-week project-based training program focused on practical skills in data engineering, machine learning, generative AI, and modern deployment technologies. The program emphasizes hands-on experience with real-world projects and professional development. Highlights include: Comprehensive 3-month (12-week) project-based training curriculum, cutting-edge technologies including Generative AI and RAG systems, practical experience with Docker, CI/CD, and cloud deployment, professional development in enterprise work culture and communication, direct mentorship from industry experts and founders, focus on both technical excellence and career readiness, and end-to-end project experience from data processing to deployment. This program provides comprehensive preparation for roles in data engineering, machine learning, and AI development.',
+        issuer: 'Kifiya Technologies',
+        date: '2025',
+        image: 'asset/certificates/kifiya-detail.jpg',
+        download: 'asset/certificates/kifiya-cert.pdf'
+      }
+    }
+
+    const cert = certificates[certType]
+
+    if (cert) {
+      modalTitle.textContent = cert.title
+      modalProgram.textContent = cert.program
+      modalDescription.textContent = cert.description
+      modalIssuer.textContent = cert.issuer
+      modalDate.textContent = cert.date
+      modalImage.src = cert.image
+      modalDownload.href = cert.download
+
+      modal.style.display = 'block'
+      document.body.style.overflow = 'hidden' // Prevent background scrolling
+    }
+  }
+
+  window.closeCertModal = function(event) {
+    const modal = document.getElementById('certModal')
+    modal.style.display = 'none'
+    document.body.style.overflow = 'auto' // Restore background scrolling
+
+    // If click was outside the modal content, close it
+    if (event && event.target === modal) {
+      return
+    }
+  }
+
+  // Close modal when clicking outside of it or on the close button
+  document.addEventListener('click', function(event) {
+    const modal = document.getElementById('certModal')
+    if (event.target === modal) {
+      closeCertModal()
+    }
+  })
+
+  // Close modal with Escape key
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+      closeCertModal()
+    }
+  })
+
+  // Show More Projects Toggle
+  window.toggleProjects = function() {
+    const hiddenProjects = document.querySelectorAll('.hidden-projects')
+    const showMoreBtn = document.getElementById('showMoreBtn')
+    const showMoreIcon = document.getElementById('showMoreIcon')
+    const showMoreText = document.getElementById('showMoreText')
+    const showMoreContainer = document.getElementById('showMoreContainer')
+
+    const isExpanded = showMoreBtn.classList.contains('expanded')
+
+    if (isExpanded) {
+      // Hide additional projects
+      hiddenProjects.forEach(project => {
+        project.style.display = 'none'
+      })
+
+      // Update button to "Show More"
+      showMoreIcon.classList.remove('fa-chevron-up')
+      showMoreIcon.classList.add('fa-chevron-down')
+      showMoreText.textContent = 'Show More Projects'
+      showMoreBtn.classList.remove('expanded')
+
+      // Smooth scroll to show more button
+      showMoreContainer.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    } else {
+      // Show all projects
+      hiddenProjects.forEach(project => {
+        project.style.display = 'block'
+      })
+
+      // Update button to "Show Less"
+      showMoreIcon.classList.remove('fa-chevron-down')
+      showMoreIcon.classList.add('fa-chevron-up')
+      showMoreText.textContent = 'Show Less Projects'
+      showMoreBtn.classList.add('expanded')
+
+      // Smooth scroll to last project
+      const lastProject = hiddenProjects[hiddenProjects.length - 1]
+      if (lastProject) {
+        lastProject.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }
+    }
+  }
+
+  // Initialize hidden projects on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    const hiddenProjects = document.querySelectorAll('.hidden-projects')
+    hiddenProjects.forEach(project => {
+      project.style.display = 'none'
+    })
   })
 }
