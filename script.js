@@ -59,8 +59,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Save theme preference to localStorage
-    const theme = document.body.classList.contains("dark-mode") ? "dark" : "light"
-    localStorage.setItem("theme", theme)
+    const theme = document.body.classList.contains("dark-mode") ? "dark" : "dark"
+    localStorage.setItem("theme", "dark")
   })
 
   // Check for saved theme preference
