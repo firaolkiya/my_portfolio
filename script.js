@@ -64,7 +64,8 @@ document.addEventListener("DOMContentLoaded", () => {
   })
 
   // Check for saved theme preference
-  const savedTheme = localStorage.getItem("theme")
+  // const savedTheme = localStorage.getItem("theme")
+  const savedTheme ="dark"
   if (savedTheme === "dark") {
     document.body.classList.add("dark-mode")
     themeToggle.innerHTML = '<i class="fas fa-sun"></i>'
